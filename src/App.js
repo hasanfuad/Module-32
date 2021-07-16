@@ -1,4 +1,5 @@
 // import './App.css';
+import {useEffect, useState} from 'react'
 
 function App() {
    const persons = ['Fuad','Fahad', 'Farhana'];
@@ -17,6 +18,10 @@ function App() {
   return (
     <div className="App">
      <Person name={persons[0]} profession={profession[0]}/>
+
+     <Counter/>
+
+     <User/>
 
      {
        products.map((pd)=> <Product product={pd}/>)
@@ -48,6 +53,50 @@ function Product(props){
     <h1>{name}</h1>
     <h3>${price}</h3>
     <button>Buy</button>
+  </div>
+}
+
+
+function Counter(){
+  const [count, setCount] = useState(10);
+  const handleButton = (()=> {
+    setCount(count + 1)
+  })
+
+  const handleMinusBtn = (()=>{
+    setCount(count - 1)
+  })
+
+
+  return <div>
+    <h1>Counter:{count} </h1>
+    <button onClick={handleButton}>Increase</button>
+    <button onClick={handleMinusBtn}>Decrease</button>
+  </div>
+}
+
+
+
+function User(){
+  const [user, setUser] = useState([]);
+  useEffect(()=>{
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(data => setUser(data))
+  }, [])
+  return <div>
+      <h1>Dynamic user: {user.length}</h1>
+      <ul>
+        {
+          user.map((userName)=>{
+            return <div style={{border: "1px solid red", margin: "10px"}}>
+              <h2>{userName.name}</h2>
+              <p>{userName.username}</p>
+              <p>{userName.email}</p>
+            </div>
+          })
+          }
+      </ul>
   </div>
 }
 
